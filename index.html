@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>產品上市管理流程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFBFC;
+    --panel: #FFFFFF;
+    --surface-2: #F6F7F8;
+    --hairline: rgba(0,0,0,0.07);
+    --hairline-strong: rgba(0,0,0,0.12);
+    --text: #1C1D21;
+    --text-2: #6B7280;
+    --text-3: #9AA1AB;
+    --accent: #5E6AD2;
+    --accent-soft: #ECEDFB;
+    --st-none-bg: #EFF0F2;   --st-none-fg: #8A8F98;
+    --st-doing-bg: #FEF3C7;  --st-doing-fg: #B45309;
+    --st-done-bg: #D1FAE5;   --st-done-fg: #047857;
+    --st-block-bg: #FEE2E2;  --st-block-fg: #B91C1C;
+    --r-sm: 6px; --r-md: 12px;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Inter", "Microsoft JhengHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  /* ===== Top bar ===== */
+  header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--hairline);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky; top: 0; z-index: 20;
+  }
+  .brand { font-family: "Inter Tight"; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 9px; }
+  .brand .mark {
+    width: 22px; height: 22px; border-radius: var(--r-sm);
+    background: var(--accent); color: #fff; display: grid; place-items: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .spacer { flex: 1; }
+
+  button {
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--hairline-strong);
+    background: var(--panel); color: var(--text);
+    padding: 7px 13px; border-radius: var(--r-sm);
+    cursor: pointer; transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease);
+    display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  }
+  button:hover { background: var(--surface-2); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.primary:hover { background: #4f5ac0; }
+  button.ghost { border-color: transparent; color: var(--text-2); padding: 7px 9px; }
+  button.ghost:hover { background: var(--surface-2); color: var(--text); }
+  button.tiny { padding: 4px 7px; font-size: 12px; }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  .kbd { font-family: "JetBrains Mono", monospace; font-size: 11px; background: var(--surface-2); border: 1px solid var(--hairline); border-radius: 4px; padding: 1px 5px; color: var(--text-2); }
+
+  /* ===== Page ===== */
+  .page { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .page-head h1 { font-family: "Inter Tight"; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; margin: 0; }
+  .page-head .sub { color: var(--text-2); font-size: 13px; margin-top: 2px; }
+
+  .summary { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--panel); border: 1px solid var(--hairline);
+    border-radius: var(--r-sm); padding: 6px 11px; font-size: 12px; color: var(--text-2);
+  }
+  .chip b { color: var(--text); font-family: "JetBrains Mono", monospace; font-weight: 600; }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--text-2); flex-wrap: wrap; margin: 0 0 12px; }
+  .legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; }
+
+  /* ===== Table ===== */
+  .table-wrap { background: var(--panel); border: 1px solid var(--hairline); border-radius: var(--r-md); overflow: hidden; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 680px; }
+  thead th {
+    background: var(--surface-2);
+    font-family: "Inter Tight"; font-weight: 600; font-size: 13px;
+    color: var(--text); text-align: center; padding: 12px 10px;
+    border-bottom: 1px solid var(--hairline);
+    white-space: nowrap;
+  }
+  thead th.col-product, thead th.col-progress, thead th.col-actions { text-align: left; color: var(--text-2); font-size: 12px; }
+  .th-dep { display: inline-flex; align-items: center; gap: 6px; }
+  .th-dep .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  tbody td { border-bottom: 1px solid var(--hairline); padding: 0; text-align: center; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #FCFCFD; }
+
+  td.product { text-align: left; padding: 12px 14px; min-width: 180px; cursor: pointer; }
+  td.product:hover .p-name { color: var(--accent); }
+  .p-name { font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+  .p-name .arrow { color: var(--text-3); font-size: 12px; }
+  .p-meta { color: var(--text-3); font-size: 12px; margin-top: 1px; display: flex; gap: 8px; align-items: center; }
+
+  td.cell { padding: 8px; cursor: pointer; user-select: none; min-width: 110px; vertical-align: middle; }
+  td.cell:hover .pill { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+  .cell-inner { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .pill {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; max-width: 100px; padding: 5px 8px; border-radius: var(--r-sm);
+    font-size: 12px; font-weight: 500; transition: .12s var(--ease);
+  }
+  .pill .led { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+  .cell-meta { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--text-3); }
+  .cell-blocker {
+    font-size: 10.5px; color: var(--st-block-fg);
+    max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .st-none  .pill { background: var(--st-none-bg);  color: var(--st-none-fg); }
+  .st-doing .pill { background: var(--st-doing-bg); color: var(--st-doing-fg); }
+  .st-done  .pill { background: var(--st-done-bg);  color: var(--st-done-fg); }
+  .st-block .pill { background: var(--st-block-bg); color: var(--st-block-fg); }
+  .st-none  .led { background: var(--st-none-fg); }
+  .st-doing .led { background: var(--st-doing-fg); }
+  .st-done  .led { background: var(--st-done-fg); }
+  .st-block .led { background: var(--st-block-fg); }
+
+  td.progress { padding: 12px 14px; text-align: left; min-width: 140px; }
+  .bar { background: var(--surface-2); border-radius: 999px; height: 6px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .35s var(--ease); }
+  .pct { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-2); margin-top: 5px; display: inline-block; }
+
+  td.actions { white-space: nowrap; padding: 8px 12px; text-align: right; }
+
+  .empty { padding: 56px 24px; text-align: center; color: var(--text-3); }
+  .empty .big { font-family: "Inter Tight"; font-weight: 600; color: var(--text-2); font-size: 15px; margin-bottom: 6px; }
+
+  /* ===== Detail / shared headers ===== */
+  .detail-head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .detail-title h1 { font-family: "Inter Tight"; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; margin: 0; }
+  .detail-title .sub { color: var(--text-2); font-size: 13px; margin-top: 2px; }
+  .detail-prog { margin-left: auto; text-align: right; }
+
+  .tabs { display: flex; gap: 0; margin-bottom: 18px; border-bottom: 1px solid var(--hairline); }
+  .tab { border: none; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--text-2); padding: 8px 2px; margin-right: 20px; font-size: 13px; }
+  .tab:hover { background: none; color: var(--text); }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+
+  .dep-sec { background: var(--panel); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px; margin-bottom: 16px; }
+  .dep-sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .dep-badge { display: inline-flex; align-items: center; gap: 7px; font-family: "Inter Tight"; font-weight: 600; font-size: 14px; }
+  .dep-badge .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .dep-count { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-2); background: var(--surface-2); border-radius: 999px; padding: 2px 9px; }
+  .dep-sec-head .spacer { flex: 1; }
+
+  /* overview tab */
+  .ov-card { background: var(--panel); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 18px; margin-bottom: 16px; }
+  .ov-title { font-family: "Inter Tight"; font-weight: 600; font-size: 14px; margin-bottom: 18px; }
+  .pipe { display: flex; align-items: flex-start; overflow-x: auto; padding-bottom: 4px; }
+  .pipe-step { display: flex; flex-direction: column; align-items: center; min-width: 96px; position: relative; text-align: center; }
+  .pipe-line { position: absolute; top: 15px; left: -50%; width: 100%; height: 2px; background: var(--hairline-strong); z-index: 0; }
+  .pipe-dot { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 14px; font-weight: 700; z-index: 1; }
+  .pipe-dot.st-none  { background: var(--st-none-fg); }
+  .pipe-dot.st-doing { background: var(--st-doing-fg); }
+  .pipe-dot.st-done  { background: var(--st-done-fg); }
+  .pipe-dot.st-block { background: var(--st-block-fg); }
+  .pipe-name { font-size: 12px; margin-top: 7px; color: var(--text); }
+  .pipe-meta { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
+  .ov-rings { display: flex; gap: 28px; flex-wrap: wrap; }
+  .ov-ring { text-align: center; }
+  .ov-ring-name { display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 13px; margin-top: 8px; }
+  .ov-ring-name .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .ov-ring-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-2); margin-top: 2px; }
+  .ov-bar { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: var(--surface-2); }
+  .ov-bar > span { display: block; height: 100%; }
+  .ov-legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: var(--text-2); }
+  .ov-legend .it { display: inline-flex; align-items: center; gap: 6px; }
+  .ov-legend .sw { width: 10px; height: 10px; border-radius: 3px; }
+  .ov-legend b { color: var(--text); font-family: "JetBrains Mono", monospace; }
+
+  /* tree tab (架構圖) */
+  .org-legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; font-size: 11.5px; color: var(--text-2); font-family: "Inter", sans-serif; font-weight: 400; }
+  .org-legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin-right: 4px; }
+  .org-scroll { overflow-x: auto; padding: 8px 4px 4px; }
+  .org { text-align: center; min-width: max-content; margin: 0 auto; }
+  .org-root { display: inline-block; }
+  .node {
+    display: inline-block; border: 1px solid var(--hairline-strong); border-radius: 6px;
+    padding: 8px 12px; font-size: 12px; background: var(--panel);
+    min-width: 80px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    box-shadow: var(--shadow);
+  }
+  .node-root { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .node-dept { font-weight: 600; display: inline-flex; align-items: center; gap: 6px; justify-content: center; }
+  .nd-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .org-depts { display: flex; justify-content: center; padding: 20px 0 0; margin: 0; list-style: none; position: relative; }
+  .org-depts::before { content: ''; position: absolute; top: 0; left: 50%; height: 20px; border-left: 1px solid var(--hairline-strong); }
+  .org-depts > li { list-style: none; position: relative; padding: 20px 16px 0; }
+  .org-depts > li::before, .org-depts > li::after { content: ''; position: absolute; top: 0; right: 50%; width: 50%; height: 20px; border-top: 1px solid var(--hairline-strong); }
+  .org-depts > li::after { right: auto; left: 50%; }
+  .org-depts > li:first-child::before, .org-depts > li:last-child::after { border: 0 none; }
+  .org-depts > li:last-child::before { border-right: 1px solid var(--hairline-strong); }
+  .org-depts > li:only-child::before, .org-depts > li:only-child::after { display: none; }
+  .leaf-stack { position: relative; display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 20px; }
+  .leaf-stack::before { content: ''; position: absolute; top: -20px; bottom: 16px; left: 50%; border-left: 1px solid var(--hairline-strong); }
+  .node-leaf { position: relative; z-index: 1; }
+  .node-leaf.empty { color: var(--text-3); }
+  .node-leaf.st-none  { background: #fff;               border-color: var(--hairline-strong); color: var(--text-2); }
+  .node-leaf.st-doing { background: var(--st-doing-bg); border-color: #E7C572; color: var(--st-doing-fg); }
+  .node-leaf.st-done  { background: var(--st-done-bg);  border-color: #9BD9BC; color: var(--st-done-fg); }
+  .node-leaf.st-block { background: var(--st-block-bg); border-color: #F0B4B4; color: var(--st-block-fg); }
+
+  /* workbench (工作台) */
+  .wb-group-title { display: flex; align-items: center; gap: 8px; font-family: "Inter Tight"; font-weight: 600; font-size: 13px; margin-bottom: 12px; }
+  .wb-row { display: flex; align-items: center; gap: 12px; padding: 9px 11px; border: 1px solid var(--hairline); border-radius: var(--r-sm); margin-bottom: 7px; cursor: pointer; background: var(--panel); }
+  .wb-row:last-child { margin-bottom: 0; }
+  .wb-row:hover { background: var(--surface-2); }
+  .wb-dep { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); min-width: 86px; }
+  .wb-dep .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .wb-prod { font-weight: 600; min-width: 120px; }
+  .wb-item { color: var(--text); }
+  .wb-owner { font-size: 12px; color: var(--text-2); }
+  .wb-note { margin-left: auto; font-size: 12px; color: var(--text-2); white-space: nowrap; }
+  .wb-note.warn { color: var(--st-block-fg); }
+  .wb-empty { color: var(--text-3); font-size: 13px; }
+  .wb-pick { display: inline-flex; align-items: center; gap: 8px; }
+  .wb-pick select { width: auto; min-width: 130px; }
+
+  /* readiness badges */
+  .rdy { font-size: 11px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex: none; }
+  .rdy-go { background: var(--st-done-bg); color: var(--st-done-fg); }
+  .rdy-wait { background: var(--surface-2); color: var(--text-2); }
+
+  /* ===== Modals ===== */
+  .overlay { position: fixed; inset: 0; background: rgba(20,21,26,.32); backdrop-filter: blur(1px); display: none; align-items: flex-start; justify-content: center; z-index: 50; padding: 64px 16px; }
+  .overlay.show { display: flex; }
+  .modal { background: var(--panel); border: 1px solid var(--hairline); border-radius: var(--r-md); width: 100%; max-width: 560px; max-height: 84vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,.16); animation: pop .2s var(--ease); }
+  @keyframes pop { from { opacity: 0; transform: translateY(-6px) scale(.99); } }
+  .modal h2 { font-family: "Inter Tight"; font-weight: 600; font-size: 16px; margin: 0; padding: 16px 20px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center; justify-content: space-between; }
+  .modal .body { padding: 18px 20px; }
+  .modal .foot { padding: 13px 20px; border-top: 1px solid var(--hairline); display: flex; justify-content: flex-end; gap: 9px; background: var(--surface-2); }
+  label.field { display: block; margin-bottom: 14px; }
+  label.field:last-child { margin-bottom: 0; }
+  label.field > span { display: block; font-size: 12px; color: var(--text-2); margin-bottom: 6px; font-weight: 500; }
+  input[type=text], input[type=date], select {
+    width: 100%; padding: 9px 11px; border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-sm); font-family: inherit; font-size: 14px; background: var(--panel); color: var(--text);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input[type=text]:focus, input[type=date]:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .hint { font-size: 12px; color: var(--text-2); margin: 0 0 14px; }
+
+  /* department (column) editor */
+  .dep-row { display: flex; align-items: center; gap: 9px; padding: 9px; border: 1px solid var(--hairline); border-radius: var(--r-sm); margin-bottom: 8px; background: var(--panel); }
+  .dep-row input[type=text] { flex: 1; }
+  .dep-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--hairline-strong); flex: none; cursor: pointer; padding: 0; }
+  .order-btns { display: flex; flex-direction: column; gap: 2px; }
+  .order-btns button { padding: 0 6px; line-height: 1.4; font-size: 10px; }
+
+  /* template editor */
+  .tpl-stage { border: 1px solid var(--hairline); border-radius: var(--r-sm); padding: 12px; margin-bottom: 10px; }
+  .tpl-stage-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; }
+  .tpl-stage-head .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .tpl-row { display: flex; gap: 7px; margin-bottom: 7px; align-items: center; }
+  .tpl-row .tpl-name { flex: 1; }
+  .tpl-row .tpl-dep { width: 210px; flex: none; font-size: 12.5px; padding: 8px 9px; }
+
+  /* work-item rows */
+  .ci-list { display: flex; flex-direction: column; gap: 8px; }
+  .ci-row {
+    border: 1px solid var(--hairline); border-left: 3px solid var(--st-none-fg);
+    border-radius: var(--r-sm); padding: 10px 11px; background: var(--panel);
+  }
+  .ci-row.st-none  { border-left-color: var(--st-none-fg); }
+  .ci-row.st-doing { border-left-color: var(--st-doing-fg); }
+  .ci-row.st-done  { border-left-color: var(--st-done-fg); }
+  .ci-row.st-block { border-left-color: var(--st-block-fg); background: #FFF9F9; }
+  .ci-top { display: flex; align-items: center; gap: 8px; }
+  .ci-top input.ci-name { flex: 1; }
+  .ci-status { width: 96px; flex: none; padding: 7px 9px; font-size: 13px; }
+  .ci-sub { display: flex; align-items: center; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
+  .ci-sub .ico { color: var(--text-3); font-size: 13px; }
+  .ci-sub input, .ci-sub select { font-size: 13px; padding: 7px 9px; }
+  .ci-sub input.ci-owner { width: 92px; flex: none; }
+  .ci-sub select.ci-area { width: 110px; flex: none; }
+  .ci-sub select.ci-dep { width: 190px; flex: none; }
+  .ci-sub input.ci-due { width: 150px; flex: none; }
+  .ci-sub input.ci-due.overdue { color: var(--st-block-fg); border-color: #F0B4B4; }
+  .ci-blocker { margin-top: 8px; }
+  .ci-blocker input { width: 100%; }
+  .ci-empty { color: var(--text-3); font-size: 13px; text-align: center; padding: 16px 0; }
+
+  @media (max-width: 640px) {
+    .page { padding: 16px; }
+    .detail-prog { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="mark">P</span>產品上市管理流程</div>
+  <div class="spacer"></div>
+  <button class="ghost" onclick="exportData()" title="匯出 JSON 備份">⭳ 匯出</button>
+  <button class="ghost" onclick="document.getElementById('importFile').click()" title="從 JSON 還原">⭱ 匯入</button>
+  <button onclick="openWorkbench()" title="看各部門現在能做什麼">🎯 工作台</button>
+  <button onclick="openTemplateModal()" title="編輯新產品預設項目">▤ 模板</button>
+  <button onclick="openAreaModal()">⚙ 部門設定</button>
+  <button class="primary" onclick="openProductModal()">＋ 新增產品 <span class="kbd" style="background:rgba(255,255,255,.18);border-color:transparent;color:#fff">N</span></button>
+  <input type="file" id="importFile" accept="application/json" hidden onchange="importData(event)">
+</header>
+
+<!-- 第一頁：總表 -->
+<div class="page" id="boardView">
+  <div class="page-head">
+    <div>
+      <h1>上市進度看板</h1>
+      <div class="sub">欄位即部門，點任一產品列進入細項頁。下游項目可「接續」上游項目，上游一完成即解鎖。資料存於本機瀏覽器。</div>
+    </div>
+    <div class="summary" id="summary"></div>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--st-none-bg)"></i>未開始</span>
+    <span><i class="sw" style="background:var(--st-doing-bg)"></i>進行中</span>
+    <span><i class="sw" style="background:var(--st-done-bg)"></i>已完成</span>
+    <span><i class="sw" style="background:var(--st-block-bg)"></i>卡關</span>
+  </div>
+
+  <div class="table-wrap">
+    <div class="scroll" id="tableScroll"></div>
+  </div>
+</div>
+
+<!-- 第二頁：產品細項 -->
+<div class="page" id="detailView" style="display:none"></div>
+
+<!-- 工作台 -->
+<div class="page" id="workbenchView" style="display:none"></div>
+
+<!-- Product modal -->
+<div class="overlay" id="productOverlay">
+  <div class="modal">
+    <h2 id="productTitle">新增產品 <button class="ghost tiny" onclick="closeModal('productOverlay')">✕</button></h2>
+    <div class="body">
+      <label class="field"><span>產品名稱 *</span><input type="text" id="pName" placeholder="例：2026 春季新品禮盒" autocomplete="off"></label>
+      <label class="field"><span>總負責人</span><input type="text" id="pOwner" placeholder="選填" autocomplete="off"></label>
+      <p class="hint" id="tplNote" style="margin-bottom:0"></p>
+    </div>
+    <div class="foot">
+      <button onclick="closeModal('productOverlay')">取消</button>
+      <button class="primary" onclick="saveProduct()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Template modal -->
+<div class="overlay" id="templateOverlay">
+  <div class="modal">
+    <h2>新產品模板 <button class="ghost tiny" onclick="closeModal('templateOverlay')">✕</button></h2>
+    <div class="body">
+      <p class="hint">為每個部門列出標準工作項目。下游部門的項目可選擇「接續」某個上游項目 —— 上游完成後它才會在工作台解鎖。新增產品時整套自動帶入（負責人之後再指派）。修改即時儲存。</p>
+      <div id="tplList"></div>
+    </div>
+    <div class="foot">
+      <button class="primary" onclick="closeModal('templateOverlay')">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- Department (column) settings modal -->
+<div class="overlay" id="areaOverlay">
+  <div class="modal">
+    <h2>部門設定 <button class="ghost tiny" onclick="closeModal('areaOverlay')">✕</button></h2>
+    <div class="body">
+      <p class="hint">新增 / 刪除 / 排序部門（總表的欄位，由左到右＝交接順序），點圓點可換色。儲存後現有產品自動套用。</p>
+      <div id="areaList"></div>
+      <button onclick="areaAdd()">＋ 新增部門</button>
+    </div>
+    <div class="foot">
+      <button onclick="closeModal('areaOverlay')">取消</button>
+      <button class="primary" onclick="saveAreas()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== 資料層 ===================== */
+const STORAGE_KEY = 'product_launch_tracker_v1';
+const PALETTE = ['#5E6AD2', '#DB6FA3', '#E8833A', '#0FA39A', '#7C8CF8', '#0EA5E9', '#C2410C'];
+const STATUSES = [
+  { key: '未開始', cls: 'st-none' },
+  { key: '進行中', cls: 'st-doing' },
+  { key: '已完成', cls: 'st-done' },
+  { key: '卡關',   cls: 'st-block' },
+];
+const STATUS_BY_KEY = Object.fromEntries(STATUSES.map(s => [s.key, s]));
+
+let state = load();
+let editingProductId = null;
+let view = 'board';          // 'board' | 'detail' | 'workbench'
+let detailPid = null;
+let detailTab = 'items';     // 'items' | 'overview' | 'tree'
+let workbenchArea = null;
+let editAreas = null;
+
+function defaultState() {
+  const areas = [
+    { id: uid(), name: '產品設計', color: '#5E6AD2' },
+    { id: uid(), name: '美編',     color: '#DB6FA3' },
+    { id: uid(), name: '行銷',     color: '#E8833A' },
+  ];
+  // 模板項目（含接續關係）
+  const tn = (name, dep) => ({ id: uid(), name, dep: dep || '' });
+  const t0 = [tn('市場需求訪談'), tn('規格定案'), tn('結構/外觀設計')];
+  const t1 = [tn('主視覺 KV', t0[2].id), tn('完稿輸出', t0[2].id)];
+  const t2 = [tn('行銷企劃案', t0[1].id), tn('社群素材', t1[0].id), tn('上市上線', t1[1].id)];
+  const tpl = { [areas[0].id]: t0, [areas[1].id]: t1, [areas[2].id]: t2 };
+
+  const item = (name, owner, status, blocker = '', due = '') => ({ id: uid(), name, owner, status, blocker, due, dep: '' });
+  const mk = (name, owner, created, cellsByIdx) => {
+    const cells = {};
+    areas.forEach((a, i) => cells[a.id] = cellsByIdx[i] || []);
+    return { id: uid(), name, owner, cells, created };
+  };
+
+  // 產品一：示範接續關係（KV 已解鎖、社群素材在等 KV）
+  const a0 = [ item('市場需求訪談', '怡君', '已完成', '', '2026-06-12'), item('規格定案', '怡君', '已完成', '', '2026-06-15'), item('結構/外觀設計', '建宏', '已完成') ];
+  const a1 = [ item('主視覺 KV', '雅雯', '進行中', '', '2026-07-05'), item('封面打樣', '建宏', '卡關', '等廠商報價回覆', '2026-07-02') ];
+  a1[0].dep = a0[2].id; a1[1].dep = a0[2].id;
+  const a2 = [ item('社群素材', '雅雯', '未開始') ];
+  a2[0].dep = a1[0].id;
+  const prod1 = mk('春季新品禮盒', '怡君', '2026-06-10', [a0, a1, a2]);
+
+  return {
+    areas, template: tpl,
+    products: [
+      prod1,
+      mk('限定聯名款', '建宏', '2026-06-18', [
+        [ item('聯名條件確認', '建宏', '已完成'), item('聯名視覺設計', '怡君', '進行中', '', '2026-07-08') ],
+        [ item('授權圖檔等待', '建宏', '卡關', '對方法務尚未回簽', '2026-07-01') ],
+        [ item('上市檔期規劃', '雅雯', '未開始') ],
+      ]),
+      mk('週年慶主視覺', '雅雯', '2026-05-28', [
+        [ item('主題與規格確認', '雅雯', '已完成') ],
+        [ item('各尺寸輸出', '雅雯', '已完成'), item('主視覺定稿', '怡君', '已完成') ],
+        [ item('上架素材', '雅雯', '已完成'), item('正式上線', '雅雯', '進行中', '', '2026-07-03') ],
+      ]),
+    ],
+  };
+}
+function load() {
+  try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) return migrate(JSON.parse(raw)); }
+  catch (e) { console.warn('讀取失敗', e); }
+  return defaultState();
+}
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function uid() { return 'id' + Math.floor(performance.now() * 1000).toString(36) + Math.floor(Math.random() * 1e6).toString(36); }
+
+function legacyDep(dep) { return dep === '流程' ? '行銷' : (dep || '產品設計'); }
+/* 統一補欄位：模板項目→{id,name,dep}；產品項目→補 dep */
+function normalize(s) {
+  if (!s.template || typeof s.template !== 'object') s.template = {};
+  Object.keys(s.template).forEach(aid => {
+    s.template[aid] = (s.template[aid] || []).map(t =>
+      (typeof t === 'string') ? { id: uid(), name: t, dep: '' }
+        : { id: t.id || uid(), name: t.name || '', dep: t.dep || '' });
+  });
+  (s.products || []).forEach(p => {
+    Object.keys(p.cells || {}).forEach(aid => {
+      (p.cells[aid] || []).forEach(it => { if (!('dep' in it)) it.dep = ''; });
+    });
+  });
+  return s;
+}
+function migrate(s) {
+  if (Array.isArray(s.areas)) {
+    s.areas.forEach((a, i) => { if (!a.color) a.color = PALETTE[i % PALETTE.length]; });
+    s.products = Array.isArray(s.products) ? s.products : [];
+    return normalize(s);
+  }
+  if (Array.isArray(s.stages)) {
+    s.stages.forEach(st => { st.dep = legacyDep(st.dep); });
+    (s.products || []).forEach(p => {
+      if (!p.cells) {
+        p.cells = {};
+        if (p.progress) {
+          Object.keys(p.progress).forEach(sid => {
+            const stt = p.progress[sid];
+            p.cells[sid] = (stt && stt !== '未開始')
+              ? [{ id: uid(), name: '主要工作', owner: p.owner || '', status: stt, blocker: '', due: '', dep: '' }]
+              : [];
+          });
+          delete p.progress;
+        }
+      }
+    });
+    const deps = [];
+    s.stages.forEach(st => { if (!deps.includes(st.dep)) deps.push(st.dep); });
+    const areas = deps.map((name, i) => ({ id: uid(), name, color: PALETTE[i % PALETTE.length] }));
+    const areaOf = {}; areas.forEach(a => areaOf[a.name] = a.id);
+    const oldTpl = (s.template && typeof s.template === 'object') ? s.template : {};
+    const template = {}; areas.forEach(a => template[a.id] = []);
+    s.stages.forEach(st => { (oldTpl[st.id] || []).forEach(t => template[areaOf[st.dep]].push({ id: uid(), name: (t.name || t || ''), dep: '' })); });
+    (s.products || []).forEach(p => {
+      const cells = {}; areas.forEach(a => cells[a.id] = []);
+      s.stages.forEach(st => {
+        ((p.cells || {})[st.id] || []).forEach(it => cells[areaOf[st.dep]].push({
+          id: it.id || uid(), name: it.name || '', owner: it.owner || '', status: it.status || '未開始', blocker: it.blocker || '', due: it.due || '', dep: ''
+        }));
+      });
+      p.cells = cells;
+    });
+    return normalize({ areas, template, products: s.products || [] });
+  }
+  return defaultState();
+}
+
+function syncProducts() {
+  state.products.forEach(p => {
+    if (!p.cells) p.cells = {};
+    state.areas.forEach(a => { if (!Array.isArray(p.cells[a.id])) p.cells[a.id] = []; });
+    Object.keys(p.cells).forEach(aid => { if (!state.areas.find(a => a.id === aid)) delete p.cells[aid]; });
+  });
+}
+function syncTemplate() {
+  if (!state.template) state.template = {};
+  state.areas.forEach(a => { if (!Array.isArray(state.template[a.id])) state.template[a.id] = []; });
+  Object.keys(state.template).forEach(aid => { if (!state.areas.find(a => a.id === aid)) delete state.template[aid]; });
+}
+
+/* ===================== 彙總 / 相依 ===================== */
+function areaById(id) { return state.areas.find(a => a.id === id); }
+function cellItems(p, aid) { return p.cells[aid] || []; }
+function allItems(p) { const r = []; state.areas.forEach(a => (p.cells[a.id] || []).forEach(it => r.push(it))); return r; }
+function itemById(p, id) { for (const aid of Object.keys(p.cells)) { const it = p.cells[aid].find(x => x.id === id); if (it) return it; } return null; }
+function aggStatus(items) {
+  if (!items.length) return '未開始';
+  if (items.some(i => i.status === '卡關')) return '卡關';
+  if (items.every(i => i.status === '已完成')) return '已完成';
+  if (items.some(i => i.status !== '未開始')) return '進行中';
+  return '未開始';
+}
+function doneCount(items) { return items.filter(i => i.status === '已完成').length; }
+function firstBlocker(items) { const b = items.find(i => i.status === '卡關'); return b ? (b.blocker || b.name) : ''; }
+function isOverdue(it) { return it.due && it.due < today() && it.status !== '已完成'; }
+function calcProgress(p) {
+  if (state.areas.length === 0) return 0;
+  const done = state.areas.filter(a => aggStatus(cellItems(p, a.id)) === '已完成').length;
+  return Math.round(done / state.areas.length * 100);
+}
+/* 項目就緒狀態：done / block / doing / waiting(等上游) / ready(可開始) */
+function itemState(p, it) {
+  if (it.status === '已完成') return 'done';
+  if (it.status === '卡關') return 'block';
+  if (it.status === '進行中') return 'doing';
+  if (it.dep) { const up = itemById(p, it.dep); if (up && up.status !== '已完成') return 'waiting'; }
+  return 'ready';
+}
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ===================== 路由 ===================== */
+function showPage(which) {
+  document.getElementById('boardView').style.display = which === 'board' ? 'block' : 'none';
+  document.getElementById('detailView').style.display = which === 'detail' ? 'block' : 'none';
+  document.getElementById('workbenchView').style.display = which === 'workbench' ? 'block' : 'none';
+}
+function render() {
+  syncProducts();
+  syncTemplate();
+  if (view === 'workbench') { renderWorkbench(); save(); return; }
+  const p = detailPid ? state.products.find(x => x.id === detailPid) : null;
+  if (view === 'detail' && p) { renderDetail(p); }
+  else { view = 'board'; detailPid = null; renderBoard(); }
+  save();
+}
+function openDetail(pid) { view = 'detail'; detailPid = pid; detailTab = 'items'; window.scrollTo(0, 0); render(); }
+function backToBoard() { view = 'board'; detailPid = null; window.scrollTo(0, 0); render(); }
+function setTab(t) { detailTab = t; render(); }
+function openWorkbench() { view = 'workbench'; window.scrollTo(0, 0); render(); }
+function setWorkbenchArea(v) { workbenchArea = v; render(); }
+
+/* ===================== 第一頁：總表 ===================== */
+function renderBoard() {
+  showPage('board');
+  renderSummary();
+  const host = document.getElementById('tableScroll');
+
+  if (state.products.length === 0) {
+    host.innerHTML = `<div class="empty"><div class="big">尚無產品</div>點右上角「＋ 新增產品」開始追蹤，或先到「部門設定」調整欄位。</div>`;
+    return;
+  }
+
+  let h = '<table><thead><tr>';
+  h += '<th class="col-product">產品</th>';
+  state.areas.forEach(a => {
+    h += `<th><span class="th-dep"><i class="dot" style="background:${a.color}"></i>${esc(a.name)}</span></th>`;
+  });
+  h += '<th class="col-progress">總進度</th><th class="col-actions"></th></tr></thead><tbody>';
+
+  state.products.forEach(p => {
+    h += '<tr>';
+    h += `<td class="product" onclick="openDetail('${p.id}')">
+      <div class="p-name">${esc(p.name)}<span class="arrow">›</span></div>
+      <div class="p-meta">${p.owner ? '負責人 ' + esc(p.owner) : '<span style="color:var(--text-3)">未指派</span>'}</div></td>`;
+    state.areas.forEach(a => {
+      const items = cellItems(p, a.id);
+      const status = aggStatus(items);
+      const st = STATUS_BY_KEY[status];
+      const total = items.length, done = doneCount(items);
+      const blk = firstBlocker(items);
+      h += `<td class="cell ${st.cls}" onclick="openDetail('${p.id}')" title="${esc(a.name)}：${status}（${done}/${total} 完成，點擊進入細項頁）">
+        <div class="cell-inner">
+          <span class="pill"><i class="led"></i>${status}</span>
+          <span class="cell-meta">${total ? done + '/' + total : '—'}</span>
+          ${blk ? `<span class="cell-blocker" title="${esc(blk)}">⚠ ${esc(blk)}</span>` : ''}
+        </div></td>`;
+    });
+    const pct = calcProgress(p);
+    h += `<td class="progress"><div class="bar"><i style="width:${pct}%"></i></div><span class="pct">${pct}%</span></td>`;
+    h += `<td class="actions">
+      <button class="ghost tiny" onclick="openProductModal('${p.id}')" title="編輯">✎</button>
+      <button class="ghost tiny" onclick="deleteProduct('${p.id}')" title="刪除">🗑</button></td>`;
+    h += '</tr>';
+  });
+  h += '</tbody></table>';
+  host.innerHTML = h;
+}
+
+function renderSummary() {
+  const total = state.products.length;
+  let blocked = 0, done = 0;
+  state.products.forEach(p => {
+    if (calcProgress(p) === 100) done++;
+    if (state.areas.some(a => aggStatus(cellItems(p, a.id)) === '卡關')) blocked++;
+  });
+  document.getElementById('summary').innerHTML = `
+    <span class="chip">產品 <b>${total}</b></span>
+    <span class="chip"><i class="dot" style="background:var(--st-done-fg)"></i>已上市 <b>${done}</b></span>
+    <span class="chip"><i class="dot" style="background:var(--st-block-fg)"></i>有卡關 <b>${blocked}</b></span>`;
+}
+
+/* ===================== 工作台 ===================== */
+function renderWorkbench() {
+  showPage('workbench');
+  const host = document.getElementById('workbenchView');
+  if (!state.areas.length) { host.innerHTML = `<div class="detail-head"><button class="ghost" onclick="backToBoard()">← 返回總表</button></div><div class="empty">尚無部門</div>`; return; }
+  if (!areaById(workbenchArea)) workbenchArea = state.areas[0].id;
+  const area = areaById(workbenchArea);
+
+  const groups = { ready: [], doing: [], waiting: [], block: [] };
+  state.products.forEach(p => {
+    cellItems(p, area.id).forEach(it => {
+      const stt = itemState(p, it);
+      if (groups[stt]) groups[stt].push({ p, it });
+    });
+  });
+
+  let h = `<div class="detail-head">
+    <button class="ghost" onclick="backToBoard()">← 返回總表</button>
+    <div class="detail-title">
+      <h1>工作台</h1>
+      <div class="sub">選一個部門，看現在跨所有產品「可以動工 / 在等上游 / 卡關」的工作。</div>
+    </div>
+    <div class="wb-pick" style="margin-left:auto;">
+      <span style="font-size:12px;color:var(--text-2)">部門</span>
+      <select onchange="setWorkbenchArea(this.value)">
+        ${state.areas.map(a => `<option value="${a.id}" ${a.id === area.id ? 'selected' : ''}>${esc(a.name)}</option>`).join('')}
+      </select>
+    </div>
+  </div>`;
+
+  h += wbGroup('🟢 現在可以做', groups.ready, 'go');
+  h += wbGroup('🔵 進行中', groups.doing, 'doing');
+  h += wbGroup('⏳ 等待上游', groups.waiting, 'wait');
+  h += wbGroup('🚩 卡關', groups.block, 'block');
+  host.innerHTML = h;
+}
+function wbGroup(title, list, kind) {
+  let h = `<div class="ov-card"><div class="wb-group-title">${title}<span class="dep-count">${list.length}</span></div>`;
+  if (!list.length) {
+    h += `<div class="wb-empty">目前沒有</div>`;
+  } else {
+    list.forEach(({ p, it }) => {
+      let note = '', warn = '';
+      if (kind === 'wait') { const up = itemById(p, it.dep); note = '等：' + esc(up ? (up.name || '上游') : '上游'); }
+      else if (kind === 'block') { note = it.blocker ? ('⚠ ' + esc(it.blocker)) : '⚠ 卡關'; warn = ' warn'; }
+      else if (it.due) { note = (isOverdue(it) ? '⚠ 逾期 ' : '📅 ') + esc(it.due); if (isOverdue(it)) warn = ' warn'; }
+      h += `<div class="wb-row" onclick="openDetail('${p.id}')" title="點擊開啟產品細項">
+        <span class="wb-prod">${esc(p.name)}</span>
+        <span class="wb-item">${esc(it.name || '(未命名)')}</span>
+        ${it.owner ? `<span class="wb-owner">👤${esc(it.owner)}</span>` : ''}
+        <span class="wb-note${warn}">${note}</span>
+      </div>`;
+    });
+  }
+  h += `</div>`;
+  return h;
+}
+
+/* ===================== 第二頁：產品細項 ===================== */
+function renderDetail(p) {
+  showPage('detail');
+  const host = document.getElementById('detailView');
+  const pct = calcProgress(p);
+
+  let h = `<div class="detail-head">
+    <button class="ghost" onclick="backToBoard()">← 返回總表</button>
+    <div class="detail-title">
+      <h1>${esc(p.name)}</h1>
+      <div class="sub">${p.owner ? '總負責人 ' + esc(p.owner) : '未指派負責人'}</div>
+    </div>
+    <div class="detail-prog">
+      <div class="bar" style="width:180px"><i style="width:${pct}%"></i></div>
+      <span class="pct">${pct}% 完成</span>
+    </div>
+  </div>`;
+
+  h += `<div class="tabs">
+    <button class="tab ${detailTab === 'items' ? 'active' : ''}" onclick="setTab('items')">細項清單</button>
+    <button class="tab ${detailTab === 'overview' ? 'active' : ''}" onclick="setTab('overview')">進度總覽</button>
+    <button class="tab ${detailTab === 'tree' ? 'active' : ''}" onclick="setTab('tree')">架構圖</button>
+  </div>`;
+
+  h += (detailTab === 'overview') ? buildOverview(p) : (detailTab === 'tree') ? buildTree(p) : buildItems(p);
+  host.innerHTML = h;
+}
+
+function buildItems(p) {
+  let h = '';
+  state.areas.forEach(a => {
+    const its = cellItems(p, a.id);
+    const total = its.length, done = doneCount(its);
+    h += `<section class="dep-sec">
+      <div class="dep-sec-head">
+        <span class="dep-badge"><i class="dot" style="background:${a.color}"></i>${esc(a.name)}</span>
+        <span class="dep-count">${total ? done + ' / ' + total + ' 完成' : '尚無項目'}</span>
+        <span class="spacer"></span>
+        <button class="tiny" onclick="addItemDetail('${a.id}')">＋ 新增工作項目</button>
+      </div>`;
+    if (!total) {
+      h += `<div class="ci-empty">此部門尚無工作項目</div>`;
+    } else {
+      h += `<div class="ci-list">`;
+      its.forEach(it => h += itemRow(it, a));
+      h += `</div>`;
+    }
+    h += `</section>`;
+  });
+  return h;
+}
+
+function itemRow(it, area) {
+  const p = curDetailProduct();
+  const cls = (STATUS_BY_KEY[it.status] || STATUS_BY_KEY['未開始']).cls;
+  const ai = state.areas.findIndex(a => a.id === area.id);
+  const upstream = [];
+  state.areas.slice(0, ai).forEach(ua => (p.cells[ua.id] || []).forEach(u => upstream.push({ id: u.id, label: ua.name + '｜' + (u.name || '(未命名)') })));
+  const stt = itemState(p, it);
+  let badge = '';
+  if (stt === 'ready') badge = `<span class="rdy rdy-go">🟢 可開始</span>`;
+  else if (stt === 'waiting') { const up = itemById(p, it.dep); badge = `<span class="rdy rdy-wait">🔒 等：${esc(up ? (up.name || '上游') : '上游')}</span>`; }
+
+  return `<div class="ci-row ${cls}">
+    <div class="ci-top">
+      <select class="ci-status" onchange="updItem('${it.id}','status',this.value)">
+        ${STATUSES.map(o => `<option ${o.key === it.status ? 'selected' : ''}>${o.key}</option>`).join('')}
+      </select>
+      <input class="ci-name" type="text" placeholder="工作項目" value="${esc(it.name)}" oninput="updItemSilent('${it.id}','name',this.value)">
+      ${badge}
+      <button class="ghost tiny" onclick="delItemDetail('${it.id}')" title="刪除">🗑</button>
+    </div>
+    <div class="ci-sub">
+      <span class="ico" title="負責人">👤</span>
+      <input class="ci-owner" type="text" placeholder="負責人" value="${esc(it.owner || '')}" oninput="updItemSilent('${it.id}','owner',this.value)">
+      <span class="ico" title="所屬部門">🏷</span>
+      <select class="ci-area" onchange="updItem('${it.id}','area',this.value)">
+        ${state.areas.map(a => `<option value="${a.id}" ${a.id === area.id ? 'selected' : ''}>${esc(a.name)}</option>`).join('')}
+      </select>
+      ${upstream.length ? `<span class="ico" title="接續自上游項目">🔗</span>
+      <select class="ci-dep" onchange="updItem('${it.id}','dep',this.value)" title="要等哪個上游項目完成才能開始">
+        <option value="">無前置（可立即開始）</option>
+        ${upstream.map(u => `<option value="${u.id}" ${it.dep === u.id ? 'selected' : ''}>↳ ${esc(u.label)}</option>`).join('')}
+      </select>` : ''}
+      <span class="ico" title="截止日">📅</span>
+      <input class="ci-due ${isOverdue(it) ? 'overdue' : ''}" type="date" value="${esc(it.due || '')}" onchange="updItem('${it.id}','due',this.value)">
+    </div>
+    ${it.status === '卡關'
+      ? `<div class="ci-blocker"><input type="text" placeholder="⚠ 卡在哪裡？例：等廠商報價" value="${esc(it.blocker || '')}" oninput="updItemSilent('${it.id}','blocker',this.value)"></div>`
+      : ''}
+  </div>`;
+}
+
+/* 進度總覽（圖示） */
+function ring(pct, color) {
+  const r = 26, c = 2 * Math.PI * r, off = c * (1 - pct / 100);
+  return `<svg width="68" height="68" viewBox="0 0 68 68">
+    <circle cx="34" cy="34" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="7"/>
+    <circle cx="34" cy="34" r="${r}" fill="none" style="stroke:${color}" stroke-width="7" stroke-linecap="round"
+      stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 34 34)"/>
+    <text x="34" y="39" text-anchor="middle" font-size="15" font-family="JetBrains Mono, monospace" fill="var(--text)">${pct}%</text>
+  </svg>`;
+}
+function buildOverview(p) {
+  let h = '';
+  h += `<div class="ov-card"><div class="ov-title">部門進度流</div><div class="pipe">`;
+  state.areas.forEach((a, idx) => {
+    const its = cellItems(p, a.id);
+    const stt = aggStatus(its);
+    const cls = STATUS_BY_KEY[stt].cls;
+    const icon = stt === '已完成' ? '✓' : stt === '卡關' ? '!' : stt === '進行中' ? '⋯' : '○';
+    h += `<div class="pipe-step">
+      ${idx > 0 ? '<span class="pipe-line"></span>' : ''}
+      <span class="pipe-dot ${cls}">${icon}</span>
+      <span class="pipe-name">${esc(a.name)}</span>
+      <span class="pipe-meta">${its.length ? doneCount(its) + '/' + its.length : '—'}</span>
+    </div>`;
+  });
+  h += `</div></div>`;
+
+  h += `<div class="ov-card"><div class="ov-title">部門完成度</div><div class="ov-rings">`;
+  state.areas.forEach(a => {
+    const its = cellItems(p, a.id);
+    const total = its.length, done = doneCount(its);
+    const pct = total ? Math.round(done / total * 100) : 0;
+    h += `<div class="ov-ring">${ring(pct, a.color)}
+      <div class="ov-ring-name"><i class="dot" style="background:${a.color}"></i>${esc(a.name)}</div>
+      <div class="ov-ring-meta">${done}/${total} 完成</div></div>`;
+  });
+  h += `</div></div>`;
+
+  const items = allItems(p), N = items.length;
+  const counts = {}; STATUSES.forEach(s => counts[s.key] = 0);
+  items.forEach(it => { counts[it.status] = (counts[it.status] || 0) + 1; });
+  h += `<div class="ov-card"><div class="ov-title">工作項目狀態分布（共 ${N} 項）</div>`;
+  if (!N) { h += `<div class="ci-empty">尚無工作項目</div>`; }
+  else {
+    h += `<div class="ov-bar">`;
+    STATUSES.forEach(s => { if (counts[s.key]) h += `<span style="width:${(counts[s.key] / N * 100).toFixed(2)}%;background:var(--${s.cls}-fg)"></span>`; });
+    h += `</div><div class="ov-legend">`;
+    STATUSES.forEach(s => { h += `<span class="it"><i class="sw" style="background:var(--${s.cls}-fg)"></i>${s.key} <b>${counts[s.key]}</b></span>`; });
+    h += `</div>`;
+  }
+  h += `</div>`;
+  return h;
+}
+
+/* 架構圖 */
+function buildTree(p) {
+  let h = `<div class="ov-card">
+    <div class="ov-title" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+      <span>產品架構圖</span>
+      <span class="org-legend">
+        <span><i class="sw" style="background:#fff;border:1px solid var(--hairline-strong)"></i>未開始</span>
+        <span><i class="sw" style="background:var(--st-doing-bg)"></i>進行中</span>
+        <span><i class="sw" style="background:var(--st-done-bg)"></i>已完成</span>
+        <span><i class="sw" style="background:var(--st-block-bg)"></i>卡關</span>
+      </span>
+    </div>
+    <div class="org-scroll"><div class="org">`;
+  h += `<div class="org-root"><div class="node node-root" title="${esc(p.name)}">${esc(p.name)}</div></div>`;
+  h += `<ul class="org-depts">`;
+  state.areas.forEach(a => {
+    const its = cellItems(p, a.id);
+    const done = doneCount(its);
+    h += `<li>
+      <div class="node node-dept" style="border-color:${a.color}" title="${esc(a.name)}：${its.length ? done + '/' + its.length + ' 完成' : '尚無項目'}">
+        <span class="nd-dot" style="background:${a.color}"></span>${esc(a.name)}
+      </div>
+      <div class="leaf-stack">`;
+    if (!its.length) {
+      h += `<div class="node node-leaf st-none empty">（無項目）</div>`;
+    } else {
+      its.forEach(it => {
+        const cls = (STATUS_BY_KEY[it.status] || STATUS_BY_KEY['未開始']).cls;
+        h += `<div class="node node-leaf ${cls}" title="${esc(it.name || '(未命名)')}｜${esc(it.owner || '未指派')}｜${it.status}">${esc(it.name || '(未命名)')}</div>`;
+      });
+    }
+    h += `</div></li>`;
+  });
+  h += `</ul></div></div></div>`;
+  return h;
+}
+
+/* 細項操作（目前 detailPid 產品） */
+function curDetailProduct() { return state.products.find(x => x.id === detailPid); }
+function findLoc(p, itemId) {
+  for (const aid of Object.keys(p.cells)) {
+    const idx = p.cells[aid].findIndex(it => it.id === itemId);
+    if (idx >= 0) return { aid, idx };
+  }
+  return null;
+}
+function updItemSilent(itemId, field, val) {
+  const p = curDetailProduct(); const loc = findLoc(p, itemId); if (!loc) return;
+  p.cells[loc.aid][loc.idx][field] = val; save();
+}
+function updItem(itemId, field, val) {
+  const p = curDetailProduct(); const loc = findLoc(p, itemId); if (!loc) return;
+  if (field === 'area') {
+    const [it] = p.cells[loc.aid].splice(loc.idx, 1);
+    if (!p.cells[val]) p.cells[val] = [];
+    p.cells[val].push(it);
+  } else {
+    p.cells[loc.aid][loc.idx][field] = val;
+  }
+  save(); render();
+}
+function addItemDetail(aid) {
+  const p = curDetailProduct();
+  if (!p.cells[aid]) p.cells[aid] = [];
+  p.cells[aid].push({ id: uid(), name: '', owner: '', status: '未開始', blocker: '', due: '', dep: '' });
+  save(); render();
+}
+function delItemDetail(itemId) {
+  const p = curDetailProduct(); const loc = findLoc(p, itemId); if (!loc) return;
+  p.cells[loc.aid].splice(loc.idx, 1); save(); render();
+}
+
+/* ===================== 產品 CRUD ===================== */
+function openProductModal(pid) {
+  editingProductId = pid || null;
+  document.querySelector('#productTitle').childNodes[0].nodeValue = pid ? '編輯產品 ' : '新增產品 ';
+  const p = pid ? state.products.find(x => x.id === pid) : null;
+  document.getElementById('pName').value = p ? p.name : '';
+  document.getElementById('pOwner').value = p ? (p.owner || '') : '';
+  const note = document.getElementById('tplNote');
+  if (!pid) {
+    syncTemplate();
+    const n = Object.values(state.template).reduce((a, b) => a + b.length, 0);
+    note.textContent = n ? `建立後將自動套用模板：共 ${n} 項預設工作項目（含接續關係，可至「模板」調整）。` : '目前模板為空，可至「模板」設定預設項目。';
+    note.style.display = 'block';
+  } else { note.style.display = 'none'; }
+  showModal('productOverlay');
+  setTimeout(() => document.getElementById('pName').focus(), 30);
+}
+function saveProduct() {
+  const name = document.getElementById('pName').value.trim();
+  const owner = document.getElementById('pOwner').value.trim();
+  if (!name) { alert('請輸入產品名稱'); return; }
+  if (editingProductId) {
+    const p = state.products.find(x => x.id === editingProductId);
+    p.name = name; p.owner = owner;
+  } else {
+    const cells = {}, map = {};
+    state.areas.forEach(a => {
+      cells[a.id] = (state.template[a.id] || []).map(t => {
+        const nid = uid(); map[t.id] = nid;
+        return { id: nid, name: t.name, owner: '', status: '未開始', blocker: '', due: '', dep: '' };
+      });
+    });
+    state.areas.forEach(a => {
+      (state.template[a.id] || []).forEach((t, idx) => { if (t.dep && map[t.dep]) cells[a.id][idx].dep = map[t.dep]; });
+    });
+    state.products.push({ id: uid(), name, owner, cells, created: today() });
+  }
+  closeModal('productOverlay'); render();
+}
+function deleteProduct(pid) {
+  const p = state.products.find(x => x.id === pid); if (!p) return;
+  if (!confirm(`確定刪除產品「${p.name}」？此動作無法復原。`)) return;
+  state.products = state.products.filter(x => x.id !== pid);
+  if (detailPid === pid) { view = 'board'; detailPid = null; }
+  render();
+}
+
+/* ===================== 模板設定 ===================== */
+function openTemplateModal() { syncTemplate(); renderTemplateEditor(); showModal('templateOverlay'); }
+function renderTemplateEditor() {
+  const host = document.getElementById('tplList');
+  host.innerHTML = state.areas.map((a, ai) => {
+    const items = state.template[a.id] || [];
+    const upstream = [];
+    state.areas.slice(0, ai).forEach(ua => (state.template[ua.id] || []).forEach(t => upstream.push({ id: t.id, label: ua.name + '｜' + (t.name || '(未命名)') })));
+    return `<div class="tpl-stage">
+      <div class="tpl-stage-head"><i class="dot" style="background:${a.color}"></i><b>${esc(a.name)}</b></div>
+      ${items.map((t, i) => `<div class="tpl-row">
+        <input class="tpl-name" type="text" placeholder="工作項目名稱" value="${esc(t.name)}" oninput="setTpl('${a.id}',${i},'name',this.value)">
+        ${ai > 0 ? `<select class="tpl-dep" onchange="setTpl('${a.id}',${i},'dep',this.value)" title="要等哪個上游項目完成才能開始">
+            <option value="">⛒ 無前置（可立即開始）</option>
+            ${upstream.map(u => `<option value="${u.id}" ${t.dep === u.id ? 'selected' : ''}>↳ 接續：${esc(u.label)}</option>`).join('')}
+          </select>` : ''}
+        <button class="ghost tiny" onclick="delTpl('${a.id}',${i})" title="刪除">🗑</button>
+      </div>`).join('')}
+      <button class="tiny" onclick="addTpl('${a.id}')">＋ 加項目</button>
+    </div>`;
+  }).join('');
+}
+function setTpl(aid, i, field, val) { if (!state.template[aid] || !state.template[aid][i]) return; state.template[aid][i][field] = val; save(); }
+function addTpl(aid) { if (!state.template[aid]) state.template[aid] = []; state.template[aid].push({ id: uid(), name: '', dep: '' }); save(); renderTemplateEditor(); }
+function delTpl(aid, i) { state.template[aid].splice(i, 1); save(); renderTemplateEditor(); }
+
+/* ===================== 部門（欄位）設定 ===================== */
+function openAreaModal() { editAreas = state.areas.map(a => ({ ...a })); renderAreaList(); showModal('areaOverlay'); }
+function renderAreaList() {
+  const list = document.getElementById('areaList');
+  list.innerHTML = editAreas.map((a, i) => `
+    <div class="dep-row">
+      <div class="order-btns">
+        <button class="tiny" onclick="areaMove(${i},-1)" ${i === 0 ? 'disabled' : ''}>▲</button>
+        <button class="tiny" onclick="areaMove(${i},1)" ${i === editAreas.length - 1 ? 'disabled' : ''}>▼</button>
+      </div>
+      <button class="dep-swatch" style="background:${a.color}" title="點擊換色" onclick="areaCycleColor(${i})"></button>
+      <input type="text" value="${esc(a.name)}" placeholder="部門名稱" oninput="areaSetName(${i},this.value)">
+      <button class="ghost tiny" onclick="areaRemove(${i})" title="刪除">🗑</button>
+    </div>`).join('');
+}
+function areaSetName(i, val) { editAreas[i].name = val; }
+function areaCycleColor(i) { const idx = PALETTE.indexOf(editAreas[i].color); editAreas[i].color = PALETTE[(idx + 1) % PALETTE.length]; renderAreaList(); }
+function areaMove(i, dir) { const j = i + dir; if (j < 0 || j >= editAreas.length) return; [editAreas[i], editAreas[j]] = [editAreas[j], editAreas[i]]; renderAreaList(); }
+function areaAdd() {
+  const used = editAreas.map(a => a.color);
+  const color = PALETTE.find(c => !used.includes(c)) || PALETTE[editAreas.length % PALETTE.length];
+  editAreas.push({ id: uid(), name: '', color }); renderAreaList();
+}
+function areaRemove(i) { editAreas.splice(i, 1); renderAreaList(); }
+function saveAreas() {
+  if (editAreas.length === 0) { alert('至少需要一個部門'); return; }
+  if (editAreas.some(a => !a.name.trim())) { alert('部門名稱不可空白'); return; }
+  state.areas = editAreas.map(a => ({ id: a.id, name: a.name.trim(), color: a.color }));
+  closeModal('areaOverlay'); render();
+}
+
+/* ===================== 匯出 / 匯入 ===================== */
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `產品上市進度_${today()}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importData(ev) {
+  const file = ev.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      const ok = Array.isArray(data.products) && (Array.isArray(data.areas) || Array.isArray(data.stages));
+      if (!ok) throw new Error('檔案格式不符');
+      if (!confirm('匯入將覆蓋目前所有資料，確定？')) return;
+      state = migrate(data); view = 'board'; detailPid = null; render(); alert('匯入成功');
+    } catch (err) { alert('匯入失敗：' + err.message); }
+  };
+  reader.readAsText(file); ev.target.value = '';
+}
+
+/* ===================== 共用 ===================== */
+function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function showModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('show'); }));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const open = document.querySelector('.overlay.show');
+    if (open) { open.classList.remove('show'); return; }
+    if (view !== 'board') backToBoard();
+  }
+  if (e.key.toLowerCase() === 'n' && !/input|select|textarea/i.test(document.activeElement.tagName) && !document.querySelector('.overlay.show')) {
+    e.preventDefault(); openProductModal();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
