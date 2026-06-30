@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>產品上市進度追蹤系統 — 導入規劃書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBFBFC; --panel:#FFFFFF; --surface:#F6F7F8;
+    --hair:rgba(0,0,0,.08); --hair2:rgba(0,0,0,.13);
+    --text:#1C1D21; --t2:#5b616b; --t3:#9AA1AB;
+    --accent:#5E6AD2; --accent-soft:#ECEDFB;
+    --green:#047857; --green-bg:#D1FAE5;
+    --amber:#B45309; --amber-bg:#FEF3C7;
+    --red:#B91C1C; --red-bg:#FEE2E2;
+    --pink:#DB6FA3; --orange:#E8833A;
+    --r:12px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Inter","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:"JetBrains Mono",monospace;}
+  h1,h2,h3{font-family:"Inter Tight",sans-serif;letter-spacing:-.02em;}
+  a{color:var(--accent);text-decoration:none;}
+
+  /* layout */
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;}
+  nav{position:sticky;top:0;z-index:10;background:rgba(251,251,252,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair);}
+  nav .wrap{display:flex;align-items:center;gap:18px;height:54px;overflow-x:auto;}
+  nav .logo{font-family:"Inter Tight";font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+  nav .logo .m{width:22px;height:22px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:12px;}
+  nav a{color:var(--t2);font-size:13px;white-space:nowrap;font-weight:500;}
+  nav a:hover{color:var(--text);}
+  nav .sp{flex:1;}
+
+  section{padding:40px 0;border-bottom:1px solid var(--hair);}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px;}
+  h2{font-size:26px;margin:0 0 6px;}
+  section > .wrap > p.lead{color:var(--t2);font-size:16px;margin:0 0 22px;max-width:680px;}
+
+  /* hero */
+  .hero{padding:64px 0 48px;background:linear-gradient(180deg,#fff, var(--bg));border-bottom:1px solid var(--hair);}
+  .hero h1{font-size:40px;margin:14px 0 10px;line-height:1.15;}
+  .hero .sub{font-size:18px;color:var(--t2);max-width:640px;}
+  .hero .meta{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap;}
+  .tag{display:inline-flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--hair);border-radius:999px;padding:6px 13px;font-size:13px;color:var(--t2);}
+  .tag b{color:var(--text);}
+
+  .card{background:var(--panel);border:1px solid var(--hair);border-radius:var(--r);padding:18px 20px;box-shadow:0 1px 2px rgba(0,0,0,.03);}
+  .grid{display:grid;gap:14px;}
+  .g2{grid-template-columns:1fr 1fr;}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  @media(max-width:720px){.g2,.g3{grid-template-columns:1fr;}}
+
+  .feat h3{font-size:16px;margin:10px 0 5px;}
+  .feat p{margin:0;color:var(--t2);font-size:14px;}
+  .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:17px;}
+  .ic.p{background:var(--accent-soft);} .ic.k{background:var(--green-bg);} .ic.a{background:var(--amber-bg);}
+  .ic.r{background:var(--red-bg);} .ic.i{background:#E7F0FB;} .ic.o{background:#FDEBDD;}
+
+  ul.clean{margin:0;padding-left:20px;} ul.clean li{margin:5px 0;}
+  .muted{color:var(--t2);}
+
+  /* flow steps */
+  .flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;}
+  .step{flex:1;min-width:140px;background:var(--panel);border:1px solid var(--hair);border-radius:var(--r);padding:14px;position:relative;}
+  .step .n{font-family:"JetBrains Mono";font-size:12px;color:var(--accent);font-weight:600;}
+  .step h4{margin:6px 0 4px;font-family:"Inter Tight";font-size:14px;}
+  .step p{margin:0;font-size:13px;color:var(--t2);}
+  .arrow{align-self:center;color:var(--t3);font-size:18px;}
+  @media(max-width:720px){.arrow{transform:rotate(90deg);}}
+
+  /* table */
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--hair);vertical-align:top;}
+  th{background:var(--surface);font-family:"Inter Tight";font-weight:600;font-size:13px;color:var(--t2);}
+  td.c,th.c{text-align:center;}
+  .y{color:var(--green);font-weight:600;} .n{color:var(--t3);}
+  .pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:600;}
+  .pill.rec{background:var(--green-bg);color:var(--green);}
+  .pill.now{background:var(--accent-soft);color:var(--accent);}
+  .pill.later{background:var(--surface);color:var(--t2);}
+
+  /* timeline / gantt */
+  .gantt{display:grid;grid-template-columns:170px repeat(8,1fr);gap:6px 4px;align-items:center;font-size:13px;}
+  .gantt .hd{font-family:"JetBrains Mono";font-size:11px;color:var(--t3);text-align:center;padding-bottom:4px;}
+  .gantt .lbl{font-weight:600;font-size:13px;}
+  .gantt .barwrap{grid-column:2 / span 8;height:26px;position:relative;background:var(--surface);border-radius:7px;}
+  .gantt .bar{position:absolute;top:3px;bottom:3px;border-radius:6px;display:flex;align-items:center;padding:0 9px;color:#fff;font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;}
+  .b-a{background:var(--accent);} .b-g{background:var(--green);} .b-o{background:var(--orange);} .b-p{background:var(--pink);} .b-done{background:var(--t3);}
+
+  blockquote{margin:0;padding:14px 18px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;color:#3a3f63;font-size:14px;}
+  .foot{padding:30px 0 60px;color:var(--t3);font-size:13px;text-align:center;}
+  .kbd{font-family:"JetBrains Mono";font-size:12px;background:var(--surface);border:1px solid var(--hair);border-radius:5px;padding:1px 6px;}
+
+  pre{background:#1C1D21;color:#E6E7EA;border-radius:10px;padding:14px 16px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.65;margin:12px 0;}
+  pre .c{color:#8A8F98;}
+  code.inl{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--surface);border:1px solid var(--hair);border-radius:5px;padding:1px 6px;}
+  .ok{background:var(--green-bg);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;color:#15663f;font-size:14px;margin:6px 0 18px;}
+  ol.ol{margin:0;padding-left:22px;} ol.ol li{margin:8px 0;}
+  h3.sub3{font-size:17px;margin:26px 0 6px;}
+  @media print{ nav{display:none;} section{break-inside:avoid;} .hero{padding-top:20px;} }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="logo"><span class="m">P</span>上市追蹤系統</span>
+  <span class="sp"></span>
+  <a href="#intro">概覽</a>
+  <a href="#feature">功能</a>
+  <a href="#flow">流程</a>
+  <a href="#deploy">部署</a>
+  <a href="#howto">Synology 實作</a>
+  <a href="#role">權限</a>
+  <a href="#road">開發規劃</a>
+  <a href="#ask">結論</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">內部工具導入規劃書</div>
+  <h1>產品上市進度追蹤系統</h1>
+  <div class="sub">把「產品從開發到上市」的跨部門進度、負責人、卡關與交接，集中在一個看板上 — 讓每個部門隨時知道「現在輪到我做什麼」。</div>
+  <div class="meta">
+    <span class="tag">提案人 <b>Mike Chen</b></span>
+    <span class="tag">狀態 <b>可運作雛形（MVP）已完成</b></span>
+    <span class="tag">部署目標 <b>公司 NAS</b></span>
+    <span class="tag">目前成本 <b>$0（自建）</b></span>
+  </div>
+</div></header>
+
+<!-- 概覽 -->
+<section id="intro"><div class="wrap">
+  <div class="eyebrow">概覽</div>
+  <h2>我們要解決什麼問題</h2>
+  <p class="lead">產品上市要經過產品設計 → 美編 → 行銷多個部門接力。目前進度散在訊息與口頭交接，常常「設計做完了沒人通知美編」「不知道卡在誰那」「主管要逐一問才知道全貌」。</p>
+  <div class="grid g3">
+    <div class="card"><div class="ic r">🧩</div><h3 class="feat">資訊分散</h3><p class="muted">進度在 LINE、Excel、腦袋裡，沒有單一真相來源。</p></div>
+    <div class="card"><div class="ic a">⏳</div><h3 class="feat">交接斷點</h3><p class="muted">上游完成沒人接手，時間白白流失。</p></div>
+    <div class="card"><div class="ic p">🔍</div><h3 class="feat">缺乏全貌</h3><p class="muted">主管要逐一詢問才知道哪個產品卡關。</p></div>
+  </div>
+  <p style="margin-top:22px" class="lead"><b>解法：</b>一個輕量看板，把每個產品 × 每個部門 × 每個工作項目的狀態集中，並用「相依關係」自動算出「現在誰可以開工」。已完成可運作雛形，只用一個 HTML 檔、零安裝、資料存本機。</p>
+</div></section>
+
+<!-- 功能 -->
+<section id="feature"><div class="wrap">
+  <div class="eyebrow">功能介紹</div>
+  <h2>主管會看到什麼</h2>
+  <p class="lead">六大功能，全部已在雛形中可操作。</p>
+  <div class="grid g2">
+    <div class="card feat"><div class="ic p">📋</div><h3>上市進度總表</h3><p>一頁看完所有產品 × 各部門狀態（未開始／進行中／已完成／卡關）、完成比例與卡關提示。主管一眼掌握全局。</p></div>
+    <div class="card feat"><div class="ic k">✅</div><h3>部門細項追蹤</h3><p>點進產品，每個部門底下是工作項目清單：負責人、截止日、卡關原因，部門狀態由細項自動彙總。</p></div>
+    <div class="card feat"><div class="ic a">🔗</div><h3>相依關係 + 工作台</h3><p>下游項目可「接續」上游項目；上游一完成即解鎖。<b>工作台</b>讓每個人看到「現在我可以做 / 還在等誰 / 卡關」，交接零空窗。</p></div>
+    <div class="card feat"><div class="ic i">📊</div><h3>視覺化儀表</h3><p>進度總覽（部門進度流、完成度環圈、狀態分布）與縮排式產品架構圖，適合週會與對主管報告。</p></div>
+    <div class="card feat"><div class="ic o">▤</div><h3>流程模板</h3><p>把標準上市流程（部門、工作項目、接續關係）設成模板，<b>拖拉方塊</b>即可調整，新產品一鍵套用，不必重打。</p></div>
+    <div class="card feat"><div class="ic r">⭳</div><h3>備份與轉移</h3><p>一鍵匯出／匯入 JSON，方便備份、跨電腦轉移，或交接給接手同仁。</p></div>
+  </div>
+</div></section>
+
+<!-- 流程 -->
+<section id="flow"><div class="wrap">
+  <div class="eyebrow">完整使用流程</div>
+  <h2>從設定到上市，怎麼跑</h2>
+  <p class="lead">一次性設定後，日常只需更新細項狀態，系統自動推進交接。</p>
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>設定部門</h4><p>定義欄位（產品設計／美編／行銷），由左到右＝交接順序。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">02</div><h4>設定模板</h4><p>拖拉方塊排好每個部門的標準工作項目與接續關係。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">03</div><h4>新增產品</h4><p>套用模板，整套項目與相依自動帶入，再指派負責人。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">04</div><h4>各部門更新</h4><p>每人更新自己項目的狀態、截止日，卡關時標註原因。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">05</div><h4>工作台拉動</h4><p>上游完成即解鎖，下游在工作台看到「現在可以做」，接力前進直到上市。</p></div>
+  </div>
+</div></section>
+
+<!-- 部署 -->
+<section id="deploy"><div class="wrap">
+  <div class="eyebrow">部署到公司 NAS</div>
+  <h2>三種部署方案</h2>
+  <p class="lead">目前雛形是純前端、資料存在「使用者自己的瀏覽器（localStorage）」。要多人共用，重點是把資料從各自瀏覽器搬到 NAS 集中儲存。</p>
+
+  <div class="grid g3">
+    <div class="card">
+      <span class="pill now">方案 A · 最快</span>
+      <h3 class="feat" style="margin-top:10px">NAS 當靜態網頁</h3>
+      <p class="muted">把 <span class="kbd">index.html</span> 丟進 NAS 的網頁服務（Synology <b>Web Station</b> / QNAP <b>Web Server</b>），同事用區網網址開啟。</p>
+      <ul class="clean muted" style="font-size:13px;margin-top:8px">
+        <li>✅ 半天可上線、零開發</li>
+        <li>⚠️ 資料仍各存各的瀏覽器，<b>無法共用同一份</b></li>
+        <li>適合：個人使用、示範、過渡</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:var(--accent)">
+      <span class="pill rec">方案 B · 推薦</span>
+      <h3 class="feat" style="margin-top:10px">NAS 集中儲存</h3>
+      <p class="muted">NAS 上以 <b>Docker</b> 跑一個輕量後端（Node/Express），資料存 <b>SQLite 或 MariaDB</b>（NAS 內建）。全公司看同一份、即時同步。</p>
+      <ul class="clean muted" style="font-size:13px;margin-top:8px">
+        <li>✅ 真正多人協作、單一真相來源</li>
+        <li>✅ 可加帳號、權限、通知</li>
+        <li>需求：NAS 支援 Container（多數 Synology+/QNAP 皆可）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="pill later">方案 C · 過渡</span>
+      <h3 class="feat" style="margin-top:10px">共享資料夾 + 匯入匯出</h3>
+      <p class="muted">把匯出的 JSON 放 NAS 共享資料夾（Synology Drive），需要時匯入。</p>
+      <ul class="clean muted" style="font-size:13px;margin-top:8px">
+        <li>✅ 立即可用、零開發</li>
+        <li>⚠️ 非即時、需人工同步，易衝突</li>
+        <li>適合：2–3 人、低頻率更新</li>
+      </ul>
+    </div>
+  </div>
+  <blockquote style="margin-top:18px">建議路線：先用 <b>方案 A</b> 讓團隊試用、確認流程，同步開發 <b>方案 B</b> 作為正式版。方案 B 完成後才有「帳號與主管專屬功能」的基礎。</blockquote>
+</div></section>
+
+<!-- Synology 實作 -->
+<section id="howto"><div class="wrap">
+  <div class="eyebrow">Synology 實作流程</div>
+  <h2>怎麼在 NAS 上把容器跑起來</h2>
+  <p class="lead">公司 NAS 經實測為 Synology DSM 7.x，內建 <b>Container Manager</b>（即 Docker）。以下是從零到上線的實際步驟，分「快速版」與「共用正式版」。</p>
+
+  <div class="ok">✅ 已實測：HHYNAS（192.168.10.250，主檔案伺服器）與 TimNas（192.168.10.230）皆為 Synology DSM 7.x。建議先用 TimNas 當測試機，確認無誤再上正式機。</div>
+
+  <h3 class="sub3">前置（一次性）</h3>
+  <ol class="ol">
+    <li><b>安裝 Container Manager</b>：DSM → 套件中心 → 搜尋「Container Manager」→ 安裝。（若搜不到，代表此機型不支援 Docker，需改用方案 A 或換機。）</li>
+    <li><b>建立資料夾</b>：File Station → 建立 <code class="inl">docker/launch-tracker/web</code>，把 <code class="inl">index.html</code> 放進 <code class="inl">web</code> 內。</li>
+    <li><b>取得管理員帳號</b>：安裝套件、建立專案都需要 NAS 管理員權限。</li>
+  </ol>
+
+  <h3 class="sub3">路線一 · 快速版（靜態網站，約 1 小時）</h3>
+  <p class="muted">讓全公司用同一個網址打開系統；資料仍各自存在各人瀏覽器。適合先試用、確認流程。</p>
+  <ol class="ol">
+    <li>Container Manager → <b>專案（Project）</b> → 新增。</li>
+    <li>專案名稱填 <code class="inl">launch-tracker</code>；路徑選剛建的 <code class="inl">/docker/launch-tracker</code>。</li>
+    <li>來源選「建立 docker-compose.yml」，貼上下列內容：</li>
+  </ol>
+  <pre>services:
+  web:
+    image: nginx:alpine
+    container_name: launch-tracker
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - /volume1/docker/launch-tracker/web:/usr/share/nginx/html:ro</pre>
+  <ol class="ol" start="4">
+    <li>下一步 → 完成。Container Manager 會自動下載 nginx 映像並啟動容器。</li>
+    <li>全公司開 <code class="inl">http://192.168.10.250:8080</code> 即可使用；之後更新只要替換 <code class="inl">web</code> 內的 index.html。</li>
+  </ol>
+
+  <h3 class="sub3">路線二 · 共用正式版（方案 B，需先開發後端）</h3>
+  <p class="muted">資料集中存在 NAS、全公司同一份、可加帳號與主管權限。需先把目前的純前端加上一個輕量後端（即 Roadmap 階段 2）。</p>
+  <p>架構：<b>前端（瀏覽器）→ 後端 API（容器）→ 資料庫</b>（SQLite 檔放 NAS volume，或 MariaDB 容器）。compose 形如：</p>
+  <pre>services:
+  app:
+    image: launch-tracker:1.0      <span class="c"># 自建映像，階段 2 產出</span>
+    container_name: launch-tracker
+    restart: unless-stopped
+    ports:
+      - "8080:3000"
+    volumes:
+      - /volume1/docker/launch-tracker/data:/app/data   <span class="c"># 資料留在 NAS</span></pre>
+  <p class="muted">資料夾 <code class="inl">data</code> 位於 NAS 共享空間 → 自動納入 NAS 快照與備份；換新版本只需更新映像標籤、重新建置專案。</p>
+
+  <h3 class="sub3">好記網址 + HTTPS（選用）</h3>
+  <ol class="ol">
+    <li>DSM 控制台 → <b>登入入口 → 進階 → 反向代理伺服器</b>：把 <code class="inl">https://nas/launch</code> 或一個子網域導向容器的 <code class="inl">localhost:8080</code>。</li>
+    <li>憑證：DSM 可套用 Let's Encrypt（需對外網域）或自簽憑證供內網使用，讓網址變 https。</li>
+  </ol>
+
+  <h3 class="sub3">維運與備份</h3>
+  <ul class="clean muted">
+    <li><b>開機自動啟動</b>：compose 設 <code class="inl">restart: unless-stopped</code>，NAS 重開機會自動拉起。</li>
+    <li><b>備份</b>：資料 volume 在共享資料夾 → 啟用 NAS 快照（Snapshot）與 Hyper Backup。</li>
+    <li><b>監控</b>：Container Manager 內可看容器 CPU/記憶體、日誌、重啟。</li>
+  </ul>
+
+  <h3 class="sub3">流程一覽</h3>
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>裝 Container Manager</h4><p>套件中心安裝。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">02</div><h4>放檔案 / 建資料夾</h4><p>File Station 建 docker/launch-tracker。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">03</div><h4>建 compose 專案</h4><p>貼上設定、設定埠與掛載。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">04</div><h4>啟動容器</h4><p>自動下載映像並執行。</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">05</div><h4>區網存取</h4><p>開網址使用（或加反向代理 + HTTPS）。</p></div>
+  </div>
+</div></section>
+
+<!-- 權限 -->
+<section id="role"><div class="wrap">
+  <div class="eyebrow">角色與權限</div>
+  <h2>主管才有的功能</h2>
+  <p class="lead">「誰能改什麼」需要登入帳號才能落實，屬於方案 B（集中儲存）之後的功能。規劃的權限分工如下：</p>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table>
+      <thead><tr>
+        <th>功能</th>
+        <th class="c">主管 / 管理員</th>
+        <th class="c">部門成員</th>
+        <th class="c">唯讀訪客</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>檢視所有產品與儀表</td><td class="c y">✔</td><td class="c y">✔</td><td class="c y">✔</td></tr>
+        <tr><td>更新自己負責項目的狀態</td><td class="c y">✔</td><td class="c y">✔</td><td class="c n">—</td></tr>
+        <tr><td>新增 / 刪除產品</td><td class="c y">✔</td><td class="c n">—</td><td class="c n">—</td></tr>
+        <tr><td>編輯部門、流程模板、相依關係</td><td class="c y">✔</td><td class="c n">—</td><td class="c n">—</td></tr>
+        <tr><td>指派負責人</td><td class="c y">✔</td><td class="c n">部分</td><td class="c n">—</td></tr>
+        <tr><td>匯出 / 還原整份資料</td><td class="c y">✔</td><td class="c n">—</td><td class="c n">—</td></tr>
+        <tr><td>檢視操作紀錄 / 稽核</td><td class="c y">✔</td><td class="c n">—</td><td class="c n">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px;margin-top:10px">註：可串接公司既有帳號（NAS LDAP / SSO）免另設密碼。</p>
+</div></section>
+
+<!-- 開發規劃 -->
+<section id="road"><div class="wrap">
+  <div class="eyebrow">後續開發與時程</div>
+  <h2>分階段 Roadmap</h2>
+  <p class="lead">以可運作的雛形為基礎，分四階段穩步推進；每階段都能獨立交付、立即見效。</p>
+
+  <div class="grid g2" style="margin-bottom:24px">
+    <div class="card"><span class="pill later">階段 0 · 已完成</span><h3 class="feat" style="margin-top:8px">單機雛形 MVP</h3><p class="muted">總表、細項、相依、工作台、儀表、架構圖、拖拉模板、匯出入。</p></div>
+    <div class="card"><span class="pill now">階段 1 · 體驗優化</span><h3 class="feat" style="margin-top:8px">好用度與 NAS 上架</h3><p class="muted">依負責人篩選、解鎖通知標記、列印/匯出 PDF、方案 A 上 NAS 試用。</p></div>
+    <div class="card"><span class="pill rec">階段 2 · 集中儲存</span><h3 class="feat" style="margin-top:8px">後端 + 資料庫（方案 B）</h3><p class="muted">NAS 容器化後端、共享資料庫、即時同步，全公司同一份。</p></div>
+    <div class="card"><span class="pill later">階段 3+ · 進階</span><h3 class="feat" style="margin-top:8px">帳號權限・通知・報表</h3><p class="muted">登入與角色權限、上工通知、稽核紀錄、上市績效報表。</p></div>
+  </div>
+
+  <h3 style="font-size:16px;margin:0 0 14px">部署時間軸（自核准起算 ≈ 9 週）</h3>
+  <div class="card">
+    <div class="gantt">
+      <div></div>
+      <div class="hd">W1</div><div class="hd">W2</div><div class="hd">W3</div><div class="hd">W4</div><div class="hd">W5</div><div class="hd">W6</div><div class="hd">W7</div><div class="hd">W8+</div>
+
+      <div class="lbl">階段 0 · MVP</div>
+      <div class="barwrap"><div class="bar b-done" style="left:0;width:1%;min-width:60px">已完成</div></div>
+
+      <div class="lbl">階段 1 · 優化＋A 上線</div>
+      <div class="barwrap"><div class="bar b-a" style="left:0;width:25%">優化 + NAS 試用</div></div>
+
+      <div class="lbl">階段 2 · 後端＋DB</div>
+      <div class="barwrap"><div class="bar b-g" style="left:25%;width:50%">集中儲存（方案 B）</div></div>
+
+      <div class="lbl">階段 3 · 權限</div>
+      <div class="barwrap"><div class="bar b-o" style="left:62.5%;width:25%">帳號 / 角色權限</div></div>
+
+      <div class="lbl">階段 4 · 通知/報表</div>
+      <div class="barwrap"><div class="bar b-p" style="left:87.5%;width:12.5%">持續</div></div>
+    </div>
+    <p class="muted" style="font-size:12.5px;margin:14px 0 0">時程為單人兼職開發估算；若需求單純可更短。各階段可獨立上線，不必等全部完成。</p>
+  </div>
+</div></section>
+
+<!-- 風險 -->
+<section><div class="wrap">
+  <div class="eyebrow">風險與對策</div>
+  <h2>需要注意的事</h2>
+  <div class="grid g2">
+    <div class="card"><h3 class="feat">資料安全與備份</h3><p class="muted">階段 0/A 資料在本機，換機/清快取會遺失 → 養成定期匯出；方案 B 後由 NAS 統一備份（快照）。</p></div>
+    <div class="card"><h3 class="feat">多人同時編輯衝突</h3><p class="muted">方案 C 以人工同步易衝突 → 盡早進入方案 B 由後端統一寫入。</p></div>
+    <div class="card"><h3 class="feat">NAS 單點故障</h3><p class="muted">依賴 NAS 開機與網路 → 啟用 NAS 快照與離線匯出備援。</p></div>
+    <div class="card"><h3 class="feat">維護人力</h3><p class="muted">自建工具需 1 名維護者 → 程式極簡、單檔好交接，並保留本規劃書與註解。</p></div>
+  </div>
+</div></section>
+
+<!-- 結論 -->
+<section id="ask"><div class="wrap">
+  <div class="eyebrow">結論</div>
+  <h2>需要主管的決定</h2>
+  <p class="lead">雛形已可立即使用，零成本。為了讓全公司共用並加入主管專屬權限，建議核准進入方案 B。</p>
+  <div class="grid g3">
+    <div class="card"><h3 class="feat">① 核准試用</h3><p class="muted">同意以方案 A 上 NAS，讓相關部門先試用 1–2 週。</p></div>
+    <div class="card"><h3 class="feat">② 核准階段 2</h3><p class="muted">同意開發集中儲存版（方案 B），作為正式系統基礎。</p></div>
+    <div class="card"><h3 class="feat">③ 指派資源</h3><p class="muted">確認 NAS 權限、容器環境，與每週可投入的開發時數。</p></div>
+  </div>
+  <blockquote style="margin-top:20px">一句話：<b>用一個免費、單檔的看板，讓上市流程從「靠問」變成「打開就知道」。</b>先試用，再決定要不要升級成全公司共用的正式系統。</blockquote>
+</div></section>
+
+<div class="foot">產品上市進度追蹤系統 · 導入規劃書 · 提案人 Mike Chen · 內部文件</div>
+
+</body>
+</html>

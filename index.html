@@ -197,34 +197,28 @@
   /* tree tab (架構圖) */
   .org-legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; font-size: 11.5px; color: var(--text-2); font-family: "Inter", sans-serif; font-weight: 400; }
   .org-legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin-right: 4px; }
-  .org-scroll { overflow-x: auto; padding: 8px 4px 4px; }
-  .org { text-align: center; min-width: max-content; margin: 0 auto; }
-  .org-root { display: inline-block; }
-  .node {
-    display: inline-block; border: 1px solid var(--hairline-strong); border-radius: 6px;
-    padding: 8px 12px; font-size: 12px; background: var(--panel);
-    min-width: 80px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    box-shadow: var(--shadow);
-  }
-  .node-root { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
-  .node-dept { font-weight: 600; display: inline-flex; align-items: center; gap: 6px; justify-content: center; }
-  .nd-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-  .org-depts { display: flex; justify-content: center; padding: 20px 0 0; margin: 0; list-style: none; position: relative; }
-  .org-depts::before { content: ''; position: absolute; top: 0; left: 50%; height: 20px; border-left: 1px solid var(--hairline-strong); }
-  .org-depts > li { list-style: none; position: relative; padding: 20px 16px 0; }
-  .org-depts > li::before, .org-depts > li::after { content: ''; position: absolute; top: 0; right: 50%; width: 50%; height: 20px; border-top: 1px solid var(--hairline-strong); }
-  .org-depts > li::after { right: auto; left: 50%; }
-  .org-depts > li:first-child::before, .org-depts > li:last-child::after { border: 0 none; }
-  .org-depts > li:last-child::before { border-right: 1px solid var(--hairline-strong); }
-  .org-depts > li:only-child::before, .org-depts > li:only-child::after { display: none; }
-  .leaf-stack { position: relative; display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 20px; }
-  .leaf-stack::before { content: ''; position: absolute; top: -20px; bottom: 16px; left: 50%; border-left: 1px solid var(--hairline-strong); }
-  .node-leaf { position: relative; z-index: 1; }
-  .node-leaf.empty { color: var(--text-3); }
-  .node-leaf.st-none  { background: #fff;               border-color: var(--hairline-strong); color: var(--text-2); }
-  .node-leaf.st-doing { background: var(--st-doing-bg); border-color: #E7C572; color: var(--st-doing-fg); }
-  .node-leaf.st-done  { background: var(--st-done-bg);  border-color: #9BD9BC; color: var(--st-done-fg); }
-  .node-leaf.st-block { background: var(--st-block-bg); border-color: #F0B4B4; color: var(--st-block-fg); }
+  .atree { font-size: 13px; padding: 4px 2px; }
+  .at-root { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; flex-wrap: wrap; }
+  .at-root .at-name { font-family: "Inter Tight"; font-weight: 600; font-size: 15px; color: var(--accent); }
+  .at-root .at-prog { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .at-branch { margin-left: 20px; border-left: 1.5px solid var(--hairline-strong); margin-top: 2px; }
+  .at-dept { position: relative; padding: 12px 0 2px 24px; }
+  .at-dept::before { content: ''; position: absolute; left: 0; top: 24px; width: 18px; border-top: 1.5px solid var(--hairline-strong); }
+  .at-dept-head { display: inline-flex; align-items: center; gap: 8px; font-family: "Inter Tight"; font-weight: 600; font-size: 13.5px; flex-wrap: wrap; }
+  .at-dept-head .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .at-count { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-2); background: var(--surface-2); border-radius: 999px; padding: 2px 8px; font-weight: 500; }
+  .at-items { margin-left: 24px; border-left: 1px solid var(--hairline); padding-bottom: 6px; }
+  .at-item { position: relative; padding: 6px 0 6px 22px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .at-item::before { content: ''; position: absolute; left: 0; top: 50%; width: 16px; border-top: 1px solid var(--hairline); }
+  .at-ic { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; flex: none; }
+  .at-ic.st-none  { background: var(--st-none-fg); }
+  .at-ic.st-doing { background: var(--st-doing-fg); }
+  .at-ic.st-done  { background: var(--st-done-fg); }
+  .at-ic.st-block { background: var(--st-block-fg); }
+  .at-iname { font-weight: 500; }
+  .at-owner { font-size: 12px; color: var(--text-2); }
+  .at-empty { color: var(--text-3); font-size: 12.5px; padding: 6px 0 6px 22px; position: relative; }
+  .at-empty::before { content: ''; position: absolute; left: 0; top: 50%; width: 16px; border-top: 1px solid var(--hairline); }
 
   /* workbench (工作台) */
   .wb-group-title { display: flex; align-items: center; gap: 8px; font-family: "Inter Tight"; font-weight: 600; font-size: 13px; margin-bottom: 12px; }
@@ -280,6 +274,17 @@
   .tpl-row { display: flex; gap: 7px; margin-bottom: 7px; align-items: center; }
   .tpl-row .tpl-name { flex: 1; }
   .tpl-row .tpl-dep { width: 210px; flex: none; font-size: 12.5px; padding: 8px 9px; }
+  .tpl-stage-head .tpl-hint-i { margin-left: auto; font-size: 11px; color: var(--text-3); font-weight: 400; }
+  .tpl-cards { display: flex; flex-direction: column; gap: 7px; min-height: 10px; border-radius: var(--r-sm); padding: 2px; }
+  .tpl-cards.over { outline: 2px dashed var(--accent); outline-offset: 1px; }
+  .tpl-card { display: flex; align-items: center; gap: 7px; padding: 7px 9px; border: 1px solid var(--hairline-strong); border-radius: var(--r-sm); background: var(--panel); }
+  .tpl-card.over { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  .tpl-card .grip { cursor: grab; color: var(--text-3); font-size: 14px; user-select: none; line-height: 1; }
+  .tpl-card .grip:active { cursor: grabbing; }
+  .tpl-card .tpl-name { flex: 1; }
+  .tpl-card .tpl-dep { width: 178px; flex: none; font-size: 12.5px; padding: 7px 9px; }
+  .tpl-add { font-size: 12.5px; color: var(--accent); cursor: pointer; padding: 5px 4px; width: fit-content; }
+  .tpl-add:hover { text-decoration: underline; }
 
   /* work-item rows */
   .ci-list { display: flex; flex-direction: column; gap: 8px; }
@@ -661,14 +666,16 @@ function renderWorkbench() {
   showPage('workbench');
   const host = document.getElementById('workbenchView');
   if (!state.areas.length) { host.innerHTML = `<div class="detail-head"><button class="ghost" onclick="backToBoard()">← 返回總表</button></div><div class="empty">尚無部門</div>`; return; }
-  if (!areaById(workbenchArea)) workbenchArea = state.areas[0].id;
-  const area = areaById(workbenchArea);
+  const isAll = !workbenchArea || workbenchArea === '__all__' || !areaById(workbenchArea);
+  const areas = isAll ? state.areas : [areaById(workbenchArea)];
 
   const groups = { ready: [], doing: [], waiting: [], block: [] };
   state.products.forEach(p => {
-    cellItems(p, area.id).forEach(it => {
-      const stt = itemState(p, it);
-      if (groups[stt]) groups[stt].push({ p, it });
+    areas.forEach(area => {
+      cellItems(p, area.id).forEach(it => {
+        const stt = itemState(p, it);
+        if (groups[stt]) groups[stt].push({ p, it, area });
+      });
     });
   });
 
@@ -676,12 +683,13 @@ function renderWorkbench() {
     <button class="ghost" onclick="backToBoard()">← 返回總表</button>
     <div class="detail-title">
       <h1>工作台</h1>
-      <div class="sub">選一個部門，看現在跨所有產品「可以動工 / 在等上游 / 卡關」的工作。</div>
+      <div class="sub">挑一個部門（或全部），看現在跨所有產品「可以動工 / 進行中 / 在等上游 / 卡關」的工作。</div>
     </div>
     <div class="wb-pick" style="margin-left:auto;">
       <span style="font-size:12px;color:var(--text-2)">部門</span>
       <select onchange="setWorkbenchArea(this.value)">
-        ${state.areas.map(a => `<option value="${a.id}" ${a.id === area.id ? 'selected' : ''}>${esc(a.name)}</option>`).join('')}
+        <option value="__all__" ${isAll ? 'selected' : ''}>全部部門</option>
+        ${state.areas.map(a => `<option value="${a.id}" ${!isAll && a.id === workbenchArea ? 'selected' : ''}>${esc(a.name)}</option>`).join('')}
       </select>
     </div>
   </div>`;
@@ -697,12 +705,13 @@ function wbGroup(title, list, kind) {
   if (!list.length) {
     h += `<div class="wb-empty">目前沒有</div>`;
   } else {
-    list.forEach(({ p, it }) => {
+    list.forEach(({ p, it, area }) => {
       let note = '', warn = '';
       if (kind === 'wait') { const up = itemById(p, it.dep); note = '等：' + esc(up ? (up.name || '上游') : '上游'); }
       else if (kind === 'block') { note = it.blocker ? ('⚠ ' + esc(it.blocker)) : '⚠ 卡關'; warn = ' warn'; }
       else if (it.due) { note = (isOverdue(it) ? '⚠ 逾期 ' : '📅 ') + esc(it.due); if (isOverdue(it)) warn = ' warn'; }
       h += `<div class="wb-row" onclick="openDetail('${p.id}')" title="點擊開啟產品細項">
+        <span class="wb-dep"><i class="dot" style="background:${area.color}"></i>${esc(area.name)}</span>
         <span class="wb-prod">${esc(p.name)}</span>
         <span class="wb-item">${esc(it.name || '(未命名)')}</span>
         ${it.owner ? `<span class="wb-owner">👤${esc(it.owner)}</span>` : ''}
@@ -861,40 +870,59 @@ function buildOverview(p) {
   return h;
 }
 
-/* 架構圖 */
+/* 架構圖（縮排樹狀：產品 → 部門 → 細項） */
 function buildTree(p) {
+  const pct = calcProgress(p);
   let h = `<div class="ov-card">
     <div class="ov-title" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
       <span>產品架構圖</span>
       <span class="org-legend">
-        <span><i class="sw" style="background:#fff;border:1px solid var(--hairline-strong)"></i>未開始</span>
+        <span><i class="sw" style="background:var(--st-none-bg)"></i>未開始</span>
         <span><i class="sw" style="background:var(--st-doing-bg)"></i>進行中</span>
         <span><i class="sw" style="background:var(--st-done-bg)"></i>已完成</span>
         <span><i class="sw" style="background:var(--st-block-bg)"></i>卡關</span>
       </span>
     </div>
-    <div class="org-scroll"><div class="org">`;
-  h += `<div class="org-root"><div class="node node-root" title="${esc(p.name)}">${esc(p.name)}</div></div>`;
-  h += `<ul class="org-depts">`;
+    <div class="atree">
+      <div class="at-root">
+        <span class="at-name">${esc(p.name)}</span>
+        <span class="at-prog"><span class="bar" style="width:140px"><i style="width:${pct}%"></i></span><span class="pct">${pct}% 完成</span></span>
+      </div>
+      <div class="at-branch">`;
   state.areas.forEach(a => {
     const its = cellItems(p, a.id);
     const done = doneCount(its);
-    h += `<li>
-      <div class="node node-dept" style="border-color:${a.color}" title="${esc(a.name)}：${its.length ? done + '/' + its.length + ' 完成' : '尚無項目'}">
-        <span class="nd-dot" style="background:${a.color}"></span>${esc(a.name)}
-      </div>
-      <div class="leaf-stack">`;
+    const dpct = its.length ? Math.round(done / its.length * 100) : 0;
+    h += `<div class="at-dept">
+      <div class="at-dept-head">
+        <i class="dot" style="background:${a.color}"></i>${esc(a.name)}
+        <span class="at-count">${its.length ? done + ' / ' + its.length : '0'}</span>
+        <span class="bar" style="width:90px"><i style="width:${dpct}%;background:${a.color}"></i></span>
+      </div>`;
     if (!its.length) {
-      h += `<div class="node node-leaf st-none empty">（無項目）</div>`;
+      h += `<div class="at-items"><div class="at-empty">尚無工作項目</div></div>`;
     } else {
+      h += `<div class="at-items">`;
       its.forEach(it => {
         const cls = (STATUS_BY_KEY[it.status] || STATUS_BY_KEY['未開始']).cls;
-        h += `<div class="node node-leaf ${cls}" title="${esc(it.name || '(未命名)')}｜${esc(it.owner || '未指派')}｜${it.status}">${esc(it.name || '(未命名)')}</div>`;
+        const icon = it.status === '已完成' ? '✓' : it.status === '卡關' ? '!' : it.status === '進行中' ? '⋯' : '○';
+        const stt = itemState(p, it);
+        let badge = '';
+        if (stt === 'ready') badge = `<span class="rdy rdy-go">🟢 可開始</span>`;
+        else if (stt === 'waiting') { const up = itemById(p, it.dep); badge = `<span class="rdy rdy-wait">🔒 等：${esc(up ? (up.name || '上游') : '上游')}</span>`; }
+        h += `<div class="at-item">
+          <span class="at-ic ${cls}">${icon}</span>
+          <span class="at-iname">${esc(it.name || '(未命名)')}</span>
+          ${it.owner ? `<span class="at-owner">· ${esc(it.owner)}</span>` : ''}
+          ${badge}
+          ${it.due ? `<span class="at-owner">📅 ${esc(it.due)}</span>` : ''}
+        </div>`;
       });
+      h += `</div>`;
     }
-    h += `</div></li>`;
+    h += `</div>`;
   });
-  h += `</ul></div></div></div>`;
+  h += `</div></div></div>`;
   return h;
 }
 
@@ -989,22 +1017,48 @@ function renderTemplateEditor() {
     const upstream = [];
     state.areas.slice(0, ai).forEach(ua => (state.template[ua.id] || []).forEach(t => upstream.push({ id: t.id, label: ua.name + '｜' + (t.name || '(未命名)') })));
     return `<div class="tpl-stage">
-      <div class="tpl-stage-head"><i class="dot" style="background:${a.color}"></i><b>${esc(a.name)}</b></div>
-      ${items.map((t, i) => `<div class="tpl-row">
-        <input class="tpl-name" type="text" placeholder="工作項目名稱" value="${esc(t.name)}" oninput="setTpl('${a.id}',${i},'name',this.value)">
-        ${ai > 0 ? `<select class="tpl-dep" onchange="setTpl('${a.id}',${i},'dep',this.value)" title="要等哪個上游項目完成才能開始">
-            <option value="">⛒ 無前置（可立即開始）</option>
-            ${upstream.map(u => `<option value="${u.id}" ${t.dep === u.id ? 'selected' : ''}>↳ 接續：${esc(u.label)}</option>`).join('')}
-          </select>` : ''}
-        <button class="ghost tiny" onclick="delTpl('${a.id}',${i})" title="刪除">🗑</button>
-      </div>`).join('')}
-      <button class="tiny" onclick="addTpl('${a.id}')">＋ 加項目</button>
+      <div class="tpl-stage-head"><i class="dot" style="background:${a.color}"></i><b>${esc(a.name)}</b><span class="tpl-hint-i">拖曳 ⠿ 可排序或移到其他部門</span></div>
+      <div class="tpl-cards" ondragover="tplDragOver(event)" ondragenter="this.classList.add('over')" ondragleave="if(event.target===this)this.classList.remove('over')" ondrop="this.classList.remove('over');tplDropArea('${a.id}',event)">
+        ${items.map((t, i) => `<div class="tpl-card" ondragover="tplDragOver(event)" ondragenter="this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="this.classList.remove('over');tplDropOn('${a.id}',${i},event)">
+          <span class="grip" draggable="true" ondragstart="tplDragStart('${a.id}',${i},event)" ondragend="tplDragEnd(event)" title="拖曳排序 / 移動部門">⠿</span>
+          <input class="tpl-name" type="text" placeholder="工作項目名稱" value="${esc(t.name)}" oninput="setTpl('${a.id}',${i},'name',this.value)">
+          ${ai > 0 ? `<select class="tpl-dep" onchange="setTpl('${a.id}',${i},'dep',this.value)" title="要等哪個上游項目完成才能開始">
+              <option value="">⛒ 無前置</option>
+              ${upstream.map(u => `<option value="${u.id}" ${t.dep === u.id ? 'selected' : ''}>↳ ${esc(u.label)}</option>`).join('')}
+            </select>` : ''}
+          <button class="ghost tiny" onclick="delTpl('${a.id}',${i})" title="刪除">🗑</button>
+        </div>`).join('')}
+        <div class="tpl-add" onclick="addTpl('${a.id}')">＋ 加項目</div>
+      </div>
     </div>`;
   }).join('');
 }
 function setTpl(aid, i, field, val) { if (!state.template[aid] || !state.template[aid][i]) return; state.template[aid][i][field] = val; save(); }
 function addTpl(aid) { if (!state.template[aid]) state.template[aid] = []; state.template[aid].push({ id: uid(), name: '', dep: '' }); save(); renderTemplateEditor(); }
 function delTpl(aid, i) { state.template[aid].splice(i, 1); save(); renderTemplateEditor(); }
+
+/* 模板拖拉排序 / 跨部門搬移 */
+let tplDrag = null;
+function tplDragStart(aid, idx, e) { tplDrag = { aid, idx }; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', aid + ':' + idx); } catch (x) {} }
+function tplDragEnd() { document.querySelectorAll('.tpl-card.over,.tpl-cards.over').forEach(x => x.classList.remove('over')); tplDrag = null; }
+function tplDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function tplDropOn(destAid, destIdx, e) { e.preventDefault(); e.stopPropagation(); tplMove(destAid, destIdx); }
+function tplDropArea(destAid, e) { e.preventDefault(); tplMove(destAid, null); }
+function tplMove(destAid, destIdx) {
+  if (!tplDrag) return;
+  const srcArr = state.template[tplDrag.aid]; if (!srcArr || !srcArr[tplDrag.idx]) { tplDrag = null; return; }
+  const [item] = srcArr.splice(tplDrag.idx, 1);
+  if (!state.template[destAid]) state.template[destAid] = [];
+  const destArr = state.template[destAid];
+  let di = (destIdx === null || destIdx === undefined) ? destArr.length : destIdx;
+  if (tplDrag.aid === destAid && tplDrag.idx < di) di -= 1;
+  const destAreaIdx = state.areas.findIndex(a => a.id === destAid);
+  const upIds = new Set();
+  state.areas.slice(0, destAreaIdx).forEach(ua => (state.template[ua.id] || []).forEach(t => upIds.add(t.id)));
+  if (item.dep && !upIds.has(item.dep)) item.dep = '';
+  destArr.splice(Math.max(0, di), 0, item);
+  tplDrag = null; save(); renderTemplateEditor();
+}
 
 /* ===================== 部門（欄位）設定 ===================== */
 function openAreaModal() { editAreas = state.areas.map(a => ({ ...a })); renderAreaList(); showModal('areaOverlay'); }
